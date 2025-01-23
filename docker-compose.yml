@@ -1,0 +1,117 @@
+x-logging: &logging
+  logging:
+    options:
+      max-size: 10m
+      max-file: "10"
+
+services:
+  raiko:
+    image: us-docker.pkg.dev/mxczkevm/images/raiko:release-moonchain-0.1.0
+    container_name: raiko
+    command: --config-path=/etc/raiko/config.sgx.json --chain-spec-path=/etc/raiko/chain_spec_list.docker.json
+    devices:
+      - "/dev/sgx_enclave:/dev/sgx_enclave"
+      - "/dev/sgx_provision:/dev/sgx_provision"
+    volumes:
+      - ../log/raiko:/var/log/raiko
+      - ../config/gramine:/root/.config/gramine
+      - ../config/raiko:/root/.config/raiko
+#    ports:
+#      - "8080:8080"
+    environment:
+      - SGX=true
+      # Set to 0 (which is the default) to run on real hardware; use 1 for testing
+      - SGX_DIRECT=${SGX_DIRECT}
+      - SGX_INSTANCE_ID=${SGX_INSTANCE_ID}
+      - ETHEREUM_RPC=${ETHEREUM_RPC}
+      - ETHEREUM_BEACON_RPC=${ETHEREUM_BEACON_RPC}
+      - HOLESKY_RPC=${HOLESKY_RPC}
+      - HOLESKY_BEACON_RPC=${HOLESKY_BEACON_RPC}
+      - TAIKO_A7_RPC=${TAIKO_A7_RPC}
+      - TAIKO_MAINNET_RPC=${TAIKO_MAINNET_RPC}
+      - L1_NETWORK=${L1_NETWORK}
+      - NETWORK=${NETWORK}
+      - REDIS_URL=${REDIS_URL:-redis://redis:6379}
+      - RUST_LOG=${RUST_LOG:-info}
+      # you can use your own PCCS host
+      #- PCCS_HOST=host.docker.internal:8081
+      # use the host's network to connect to the PCCS
+      #extra_hosts:
+      #  - "host.docker.internal:host-gateway"
+    depends_on:
+      - redis
+      - pccs
+    profiles:
+      - prod-redis
+    networks:
+     - miner_net
+    <<: *logging
+
+  pccs:
+    build:
+      context: ..
+      dockerfile: Dockerfile.pccs
+    image: us-docker.pkg.dev/evmchain/images/pccs:latest
+    container_name: pccs
+    volumes:
+      - ../config/sgx-pccs/default.json:/opt/intel/pccs/config/default.json
+      - ../config/sgx-pccs/file.crt:/opt/intel/pccs/ssl_key/file.crt
+      - ../config/sgx-pccs/private.pem:/opt/intel/pccs/ssl_key/private.pem
+    networks:
+     - miner_net
+    <<: *logging
+
+  redis:
+    image: redis
+    container_name: redis
+#    ports:
+#      - "6379:6379"
+    profiles:
+      - prod-redis
+    networks:
+     - miner_net
+    <<: *logging
+
+  init:
+    image: us-docker.pkg.dev/mxczkevm/images/raiko:release-moonchain-0.1.0
+    container_name: raiko-init
+    command: --init
+    devices:
+      - "/dev/sgx_enclave:/dev/sgx_enclave"
+      - "/dev/sgx_provision:/dev/sgx_provision"
+    volumes:
+      - ../log/raiko:/var/log/raiko
+      - ../config/gramine:/root/.config/gramine
+      - ../config/raiko:/root/.config/raiko
+    environment:
+      - SGX=true
+    # environment:
+      # you can use your own PCCS host
+      #- PCCS_HOST=host.docker.internal:8081
+    depends_on:
+      - pccs
+    networks:
+     - miner_net
+    <<: *logging
+
+  moonchain_prover_agent:
+    image: us-docker.pkg.dev/mxczkevm/images/prover-manager:release-0.1.0
+    restart: always
+    environment:
+      - SGX_INSTANCE_ID=${SGX_INSTANCE_ID}
+      - PROVER_MANAGER_URL=${PROVER_MANAGER_URL}
+      - SGX_RAIKO_HOST=http://raiko:8080
+      - SERVICE_MODE=PROVER_AGENT
+      - NODE_ENV=production
+    ports:
+      - 8182:8182
+    networks:
+     - miner_net
+    <<: *logging
+
+networks:
+ miner_net:
+   driver: bridge
+   ipam:
+     config:
+       - subnet: 172.33.0.0/16
