@@ -7,6 +7,7 @@ x-logging: &logging
 services:
   raiko:
     image: us-docker.pkg.dev/mxczkevm/images/raiko:release-moonchain-0.1.0
+    restart: always
     container_name: raiko
     command: --config-path=/etc/raiko/config.sgx.json --chain-spec-path=/etc/raiko/chain_spec_list.docker.json
     devices:
@@ -48,10 +49,8 @@ services:
     <<: *logging
 
   pccs:
-    build:
-      context: ..
-      dockerfile: Dockerfile.pccs
     image: us-docker.pkg.dev/evmchain/images/pccs:latest
+    restart: always
     container_name: pccs
     volumes:
       - ../config/sgx-pccs/default.json:/opt/intel/pccs/config/default.json
@@ -95,7 +94,7 @@ services:
     <<: *logging
 
   moonchain_prover_agent:
-    image: us-docker.pkg.dev/mxczkevm/images/prover-manager:release-0.1.0
+    image: us-docker.pkg.dev/mxczkevm/images/prover-manager:release-0.2.0
     restart: always
     environment:
       - SGX_INSTANCE_ID=${SGX_INSTANCE_ID}
@@ -105,6 +104,8 @@ services:
       - NODE_ENV=production
     ports:
       - 8182:8182
+    volumes:
+      - ./data:/repos/data
     networks:
      - miner_net
     <<: *logging

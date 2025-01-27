@@ -175,3 +175,49 @@ cd sgx-prover
 ./start_moonchain_mainnet.sh
 ```
 
+
+
+
+
+## Metrics
+
+### Metrics for Prometheus request
+
+URL (GET):
+
+```
+http://172.33.0.1:8182/metrics
+```
+
+Example response:
+
+```
+# HELP timePerProof Average time (in second) used to generate a proof.
+# TYPE timePerProof gauge
+timePerProof 69
+
+# HELP successJobs5m Number of success proof job per 5 minutes.
+# TYPE successJobs5m gauge
+successJobs5m 3
+
+# HELP failJobs5m Number of failed proof job per 5 minutes.
+# TYPE failJobs5m gauge
+failJobs5m 0
+```
+
+
+
+### Get metrics in JSON
+
+URL (GET):
+
+```
+http://172.33.0.1:8182/jsonMetrics
+```
+
+Example response:
+
+```
+{"timePerProof":69,"successJobs5m":3,"failJobs5m":0}
+```
+
