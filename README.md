@@ -153,7 +153,12 @@ You can find the quote string at `/opt/moonchain/config/raiko/config/bootstrap.j
 
 
 
-7> Update instance id to `config/moonchain.json`.
+7> Use the helper script to update the instance id to `config/moonchain.json`.
+
+```
+cd /opt/moonchain
+./set_instance_id.sh <INSTANCE_ID>
+```
 
 
 
@@ -176,6 +181,17 @@ cd sgx-prover
 ```
 
 
+
+## Helper scripts
+
+| Script                     | Usage                                                        |
+| -------------------------- | ------------------------------------------------------------ |
+| start_moonchain_mainnet.sh | Start the service for Mainnet.                               |
+| start_moonchain_testnet.sh | Start the service for Testnet.                               |
+| set_instance_id.sh         | Set the SGX instance ID.                                     |
+| set_wallet_address.sh      | Set the Wallet address linked to this prover.                |
+| set_agent_token.sh         | Set the agentToken, used for communicating with Prover Manager. |
+| restart_agent.sh           | Restart the agent service. The agent service must be restart after the change of instance ID, wallet address or agentToken. |
 
 
 

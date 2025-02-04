@@ -1,3 +1,5 @@
 {
-  "instanceId": 0
+  "instanceId": 0,
+  "walletAddress": "",
+  "agentToken": ""
 }

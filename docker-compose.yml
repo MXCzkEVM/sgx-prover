@@ -94,13 +94,12 @@ services:
     <<: *logging
 
   moonchain_prover_agent:
-    image: us-docker.pkg.dev/mxczkevm/images/prover-manager:release-0.2.0
+    image: us-docker.pkg.dev/mxczkevm/images/prover-manager:release-0.3.0
     restart: always
     environment:
-      - SGX_INSTANCE_ID=${SGX_INSTANCE_ID}
       - PROVER_MANAGER_URL=${PROVER_MANAGER_URL}
       - SGX_RAIKO_HOST=http://raiko:8080
-      - SERVICE_MODE=PROVER_AGENT
+      - MOONCHAIN_SERVICE_MODE=PROVER_AGENT
       - NODE_ENV=production
     ports:
       - 8182:8182
