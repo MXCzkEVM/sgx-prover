@@ -202,7 +202,7 @@ cd sgx-prover
 URL (GET):
 
 ```
-http://172.33.0.1:8182/metrics
+http://127.0.0.1:8182/metrics
 ```
 
 Example response:
@@ -236,7 +236,7 @@ managerConnected 1
 URL (GET):
 
 ```
-http://172.33.0.1:8182/jsonMetrics
+http://127.0.0.1:8182/jsonMetrics
 ```
 
 Example response:
