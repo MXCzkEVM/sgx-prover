@@ -210,7 +210,7 @@ Example response:
 ```
 # HELP timePerProof Average time (in second) used to generate a proof.
 # TYPE timePerProof gauge
-timePerProof 69
+timePerProof 77
 
 # HELP successJobs5m Number of success proof job per 5 minutes.
 # TYPE successJobs5m gauge
@@ -219,6 +219,14 @@ successJobs5m 3
 # HELP failJobs5m Number of failed proof job per 5 minutes.
 # TYPE failJobs5m gauge
 failJobs5m 0
+
+# HELP registered Registration status. 1 registerd.
+# TYPE registered gauge
+registered 1
+
+# HELP managerConnected Connection status with Manager. 1 connected.
+# TYPE managerConnected gauge
+managerConnected 1
 ```
 
 
@@ -234,6 +242,16 @@ http://172.33.0.1:8182/jsonMetrics
 Example response:
 
 ```
-{"timePerProof":69,"successJobs5m":3,"failJobs5m":0}
+{
+  "ret": 0,
+  "message": "",
+  "result": {
+    "timePerProof": 77,
+    "successJobs5m": 3,
+    "failJobs5m": 0,
+    "registered": 1,
+    "managerConnected": 1
+  }
+}
 ```
 
