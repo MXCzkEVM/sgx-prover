@@ -188,7 +188,8 @@ cd sgx-prover
 | -------------------------- | ------------------------------------------------------------ |
 | start_moonchain_mainnet.sh | Start the service for Mainnet.                               |
 | start_moonchain_testnet.sh | Start the service for Testnet.                               |
-| set_instance_id.sh         | Set the SGX instance ID.                                     |
+| stop_moonchain.sh          | Stop the service.                                            |
+| set_instance_id.sh         | Set the SGX instance ID.<br />After change of instance ID, please run stop_moonchain.sh and then run the start script to apply the new instance ID. |
 | set_wallet_address.sh      | Set the Wallet address linked to this prover.                |
 | set_agent_token.sh         | Set the agentToken, used for communicating with Prover Manager. |
 | restart_agent.sh           | Restart the agent service. The agent service must be restart after the change of instance ID, wallet address or agentToken. |

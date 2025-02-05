@@ -94,7 +94,7 @@ services:
     <<: *logging
 
   moonchain_prover_agent:
-    image: us-docker.pkg.dev/mxczkevm/images/prover-manager:release-0.3.0
+    image: us-docker.pkg.dev/mxczkevm/images/prover-manager:release-0.4.0
     restart: always
     environment:
       - PROVER_MANAGER_URL=${PROVER_MANAGER_URL}
@@ -105,6 +105,7 @@ services:
       - 127.0.0.1:8182:8182
     volumes:
       - ./data:/repos/data
+      - ../config/moonchain.json:/etc/moonchain.json
     networks:
      - miner_net
     <<: *logging
