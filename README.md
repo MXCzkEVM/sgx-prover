@@ -83,7 +83,7 @@ sudo apt install -y gramine sgx-pck-id-retrieval-tool
 echo "Please enter Intel's PCS Service API key" && read -r API_KEY && sudo PCKIDRetrievalTool -f /tmp/pckid.csv && pckid=$(cat /tmp/pckid.csv) && ppid=$(echo "$pckid" | awk -F "," '{print $1}') && cpusvn=$(echo "$pckid" | awk -F "," '{print $3}') && pcesvn=$(echo "$pckid" | awk -F "," '{print $4}') && pceid=$(echo "$pckid" | awk -F "," '{print $2}') && curl -v "https://api.trustedservices.intel.com/sgx/certification/v4/pckcert?encrypted_ppid=${ppid}&cpusvn=${cpusvn}&pcesvn=${pcesvn}&pceid=${pceid}" -H "Ocp-Apim-Subscription-Key:${API_KEY}" 2>&1 | grep -i "SGX-FMSPC"
 ```
 
-You may reference to this [Intel's how-to guide](https://www.intel.com/content/www/us/en/developer/articles/guide/intel-software-guard-extensions-data-center-attestation-primitives-quick-install-guide.html) to get the API key.
+You need to subscribe SGX Provisioning Certification Service at [Intel Portal](https://api.portal.trustedservices.intel.com) to get the API key.
 
 
 
