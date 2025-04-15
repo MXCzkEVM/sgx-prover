@@ -63,3 +63,12 @@ On success, you will get the instance id of your prover.
 
 
 ![instance_id](instance_id.png)
+
+
+
+Mint a ERC721 NFT via ZkCenter.
+
+```
+cast send <ZKCENTER_CONTRACT_ADDRESS> "minerMint(uint256)" <SGX_INSTANCE_ID> --rpc-url https://sepolia-rollup.arbitrum.io/rpc --private-key <YOUR_PRIVATE_KEY>
+```
+
